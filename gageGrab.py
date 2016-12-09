@@ -3,7 +3,7 @@
 #              USGS Data Grabber                 #
 #         GeoReferenced Station Creator          #
 #       Author: Warren Pettee (@wpettee)         #
-#                                                #
+#                     2016                       #
 ##################################################
 import requests
 import urllib
