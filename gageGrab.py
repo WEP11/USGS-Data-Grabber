@@ -57,21 +57,21 @@ for child in root:
                 print( '},',file=fileName)
             print( '  { "type": "Feature",', end='',file=fileName)
             print( '"geometry": {"type": "Point", "coordinates": [',root[i][0][3][0][1].text,',' ,root[i][0][3][0][0].text,']},',file=fileName)
-            print('"properties": {"Station Name": "',root[i][0][0].text,'"', end='',file=fileName)
-            print(',"Station Type": "',root[i][0][4].text,'"', end='',file=fileName)
+            print('"properties": {"stationName": "',root[i][0][0].text,'"', end='',file=fileName)
+            print(',"stationType": "',root[i][0][4].text,'"', end='',file=fileName)
             
             tempName = root[i][0][0].text
 
             # stationType.append(root[i][0][4].text)
                 
         if root[i][1][0].get("variableID") == '45807197' :
-            print( ',"Streamflow":"',root[i][2][0].text,'"', end='',file=fileName)
+            print( ',"streamFlow":"',root[i][2][0].text,'"', end='',file=fileName)
             #print(stationName[i-1], ' Streamflow: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
         if root[i][1][0].get("variableID") == '45807202' :
-            print( ',"Gage Height":"',root[i][2][0].text,'"', end='',file=fileName)
+            print( ',"gageHeight":"',root[i][2][0].text,'"', end='',file=fileName)
             #print(stationName[i-1], ' Gageheight: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
         if root[i][1][0].get("variableID") == '45807140' :
-            print( ',"Rainfall":"',root[i][2][0].text,'"', end='',file=fileName)
+            print( ',"rainfall":"',root[i][2][0].text,'"', end='',file=fileName)
             #print(stationName[i-1], ' Rainfall: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
     i = i+1
 print('}',file=fileName)
