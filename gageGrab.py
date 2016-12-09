@@ -9,7 +9,7 @@ import requests
 import urllib
 from urllib.request import urlopen
 import xml.etree.ElementTree as etree
-from pykml.factory import KML_ElementMaker as KML
+import geojson
 
 stationTypeDict = {'AG' : 'Aggregate groundwater use', 'AS' : 'Aggregate surface-water-use',
                 'AT' : 'Atmosphere', 'AW' : 'Aggregate water-use establishment',
@@ -42,29 +42,39 @@ response = urllib.request.urlopen("http://waterservices.usgs.gov/nwis/iv/?county
 tree = etree.parse(response)
 root = tree.getroot()
 
+fileName = open('usgsMeck.geojson','w')
+
 i=0
 tempName=' '
+
+print( '{ "type": "FeatureCollection",',file=fileName)
+print( '"features": [',file=fileName)   
 for child in root:
     if i >= 1 :
         if tempName != root[i][0][0].text:
-            print()
+            if i > 1 :
+                print('}',file=fileName)
+                print( '},',file=fileName)
+            print( '  { "type": "Feature",', end='',file=fileName)
+            print( '"geometry": {"type": "Point", "coordinates": [',root[i][0][3][0][1].text,',' ,root[i][0][3][0][0].text,']},',file=fileName)
+            print('"properties": {"Station Name": "',root[i][0][0].text,'"', end='',file=fileName)
+            print(',"Station Type": "',root[i][0][4].text,'"', end='',file=fileName)
+            
             tempName = root[i][0][0].text
-        stationName.append(root[i][0][0].text)
-        stationLat.append(root[i][0][3][0][0].text)
-        stationLon.append(root[i][0][3][0][0].text)
-        stationType.append(root[i][0][4].text)
+
+            # stationType.append(root[i][0][4].text)
+                
         if root[i][1][0].get("variableID") == '45807197' :
-                print(stationName[i-1], ' Streamflow: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
+            print( ',"Streamflow":"',root[i][2][0].text,'"', end='',file=fileName)
+            #print(stationName[i-1], ' Streamflow: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
         if root[i][1][0].get("variableID") == '45807202' :
-                print(stationName[i-1], ' Gageheight: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
+            print( ',"Gage Height":"',root[i][2][0].text,'"', end='',file=fileName)
+            #print(stationName[i-1], ' Gageheight: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
         if root[i][1][0].get("variableID") == '45807140' :
-                print(stationName[i-1], ' Rainfall: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
+            print( ',"Rainfall":"',root[i][2][0].text,'"', end='',file=fileName)
+            #print(stationName[i-1], ' Rainfall: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
     i = i+1
-
-# First we accept a station info tsv as input...
-
-# Now we organize the data...
-
-# Now we ID what kind of stations these are...
-
-# Finally, we spit this out as either geoJSON, KML, or SHP...
+print('}',file=fileName)
+print('}',file=fileName)
+print(']',file=fileName)
+print('}',file=fileName)
