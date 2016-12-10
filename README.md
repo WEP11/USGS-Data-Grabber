@@ -5,4 +5,4 @@ In the future this will:
 
 1. Allow user input of site location
 2. Export 7-Day Charts for each site
-3. Export a KML (or equivalent) file for web users
+3. Export additional datatypes (perhaps netcdf?)
