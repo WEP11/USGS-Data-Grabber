@@ -59,7 +59,7 @@ for child in root:
             print( '"geometry": {"type": "Point", "coordinates": [',root[i][0][3][0][1].text,',' ,root[i][0][3][0][0].text,']},',file=fileName)
             print('"properties": {"stationName": "',root[i][0][0].text,'"', end='',file=fileName)
             print(',"stationType": "',root[i][0][4].text,'"', end='',file=fileName)
-            
+            print( ',"stID":"',stID,'"', end='',file=fileName)
             tempName = root[i][0][0].text
 
             # stationType.append(root[i][0][4].text)
