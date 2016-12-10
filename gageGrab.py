@@ -60,9 +60,8 @@ for child in root:
             print('"properties": {"stationName": "',root[i][0][0].text,'"', end='',file=fileName)
             print(',"stationType": "',root[i][0][4].text,'"', end='',file=fileName)
             print( ',"stID":"',stID,'"', end='',file=fileName)
+            print( ',"usgsID":"',root[i][0][1].text,'"',end='',file=fileName)
             tempName = root[i][0][0].text
-
-            # stationType.append(root[i][0][4].text)
                 
         if root[i][1][0].get("variableID") == '45807197' :
             print( ',"streamFlow":"',root[i][2][0].text,'"', end='',file=fileName)
