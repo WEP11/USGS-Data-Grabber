@@ -1,16 +1,21 @@
-##################################################
-#                                                #
-#              USGS Data Grabber                 #
-#         GeoReferenced Station Creator          #
-#       Author: Warren Pettee (@wpettee)         #
-#                     2016                       #
-##################################################
+####################################################
+#                                                  #
+#              USGS Data Grabber                   #
+#         GeoReferenced Station Creator            #
+#       Author: Warren Pettee (@wpettee)           #
+#                                                  #
+# Usage: python gageGrab.py 37119 usgsMeck.geojson #
+####################################################
+
+import argparse
 import requests
 import urllib
 from urllib.request import urlopen
 import xml.etree.ElementTree as etree
-import geojson
 
+#------------------------------------------------
+
+# Listing of all station types :
 stationTypeDict = {'AG' : 'Aggregate groundwater use', 'AS' : 'Aggregate surface-water-use',
                 'AT' : 'Atmosphere', 'AW' : 'Aggregate water-use establishment',
                 'ES' : 'Estuary', 'FA' : 'Facility', 'FA-AWL' : 'Animal waste lagoon',
@@ -32,27 +37,39 @@ stationTypeDict = {'AG' : 'Aggregate groundwater use', 'AS' : 'Aggregate surface
                 'SP' : 'Spring', 'SS' : 'Specific Source', 'ST' : 'Stream', 'ST-CA' : 'Canal',
                 'ST-DCH' : 'Ditch', 'ST-TS' : 'Tidal Stream', 'WE' : 'Wetland'}
 
-stationName = []
-stationLat = []
-stationLon = []
-stationType = []
-gageHeight = []
+# Command Line Arguments:
+parser = argparse.ArgumentParser(description='USGS Station Data Grabber')
+parser.add_argument('fipsCode',
+                    help='County FIPS Codes. May be separated by commas. Ex: 37119,37118')
+parser.add_argument('outFile',
+                    help='File to save GEOJSON output to')
+args=parser.parse_args()
 
-response = urllib.request.urlopen("http://waterservices.usgs.gov/nwis/iv/?countyCd=37119")
+# Grab data from URL...
+response = urllib.request.urlopen("http://waterservices.usgs.gov/nwis/iv/?countyCd="+args.fipsCode)
 tree = etree.parse(response)
 root = tree.getroot()
+#print(root[:][0][0].text)
+# Prepare outfile
+fileName = open(args.outFile,'w')
 
-fileName = open('usgsMeck.geojson','w')
+# Prepare to enter main loop...
+i=0 # Counter
+stID=0 # Station ID Counter
+tempName=' ' # Station name tracking
 
-i=0
-tempName=' '
-
+# Begin printing GeoJSON Format...
 print( '{ "type": "FeatureCollection",',file=fileName)
 print( '"features": [',file=fileName)   
+
+# Loop through all station reports...
 for child in root:
-    if i >= 1 :
-        if tempName != root[i][0][0].text:
+    if i >= 1 : # First entry is a request summary, so skip that
+
+	# Station Information...
+        if tempName != root[i][0][0].text: # Only provide station info if this is a new station...
             if i > 1 :
+                stID=stID+1
                 print('}',file=fileName)
                 print( '},',file=fileName)
             print( '  { "type": "Feature",', end='',file=fileName)
@@ -62,17 +79,18 @@ for child in root:
             print( ',"stID":"',stID,'"', end='',file=fileName)
             print( ',"usgsID":"',root[i][0][1].text,'"',end='',file=fileName)
             tempName = root[i][0][0].text
-                
+
+        # ID Report type and assign appropriate property...        
         if root[i][1][0].get("variableID") == '45807197' :
             print( ',"streamFlow":"',root[i][2][0].text,'"', end='',file=fileName)
-            #print(stationName[i-1], ' Streamflow: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
         if root[i][1][0].get("variableID") == '45807202' :
             print( ',"gageHeight":"',root[i][2][0].text,'"', end='',file=fileName)
-            #print(stationName[i-1], ' Gageheight: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
         if root[i][1][0].get("variableID") == '45807140' :
             print( ',"rainfall":"',root[i][2][0].text,'"', end='',file=fileName)
-            #print(stationName[i-1], ' Rainfall: ', root[i][2][0].text, ' ',root[i][2][0].get("dateTime"))
-    i = i+1
+
+    i = i+1 # Advance loop counter
+
+# Close all brackets
 print('}',file=fileName)
 print('}',file=fileName)
 print(']',file=fileName)
