@@ -32,13 +32,15 @@ stationTypeDict = {'AG' : 'Aggregate groundwater use', 'AS' : 'Aggregate surface
 variables = {'45807197' : 'streamFlow', '45807202' : 'gageHeight', '45807140' : 'rainFall'}
 
 def floodStage(current,x,action,minor,mod,major) :
-    if(current < action(x)):
-        return 0
-    elif(current > action(x) and current < minor(x)):
+    if(current < action[x]):
         return 1
-    elif(current > minor(x) and current < mod(x)):
+    elif(current > action[x] and current < minor[x]):
         return 2
-    elif(current > mod(x) and current < major(x)):
+    elif(current > minor[x] and current < mod[x]):
         return 3
-    elif(current > major(x)):
-        return 4
+    elif(current > mod[x] and current < major[x]):
+        return 3
+    elif(current > major[x]):
+        return 3
+    else:
+        return 0
