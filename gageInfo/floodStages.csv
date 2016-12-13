@@ -2,7 +2,7 @@
 # Tediously Assembled By: Warren Pettee (Github: WEP11, Twitter: @wpettee)
 # * Probably by no means complete?
 
-USGS ID, NWS ID, Station Name, Action, Minor, Moderate, Major
+NWS ID, USGS ID, Action, Minor, Moderate, Major, Stage Units, Site Name, State
 WPKA1, 02410400,nan,nan,nan,nan,ft,Jordan Dam,AL
 WLDA1, 02466031,90,90,102,105,ft,Selden Lock and Dam,AL
 WHIA1, 03575500,15,17,20,23,ft,Whitesburg,AL
