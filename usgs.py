@@ -31,6 +31,12 @@ stationTypeDict = {'AG' : 'Aggregate groundwater use', 'AS' : 'Aggregate surface
 # USGS Variable ID's to Human :
 variables = {'45807197' : 'streamFlow', '45807202' : 'gageHeight', '45807140' : 'rainFall'}
 
+# USGS Parameter Codes : (This is a VERY small portion of them)
+variableCodes = {'00004' : 'streamWidth','00011':'waterTempF','00021':'airTempF','00025':'presInHg',
+                '00032' : 'cloudCover','00035':'windSpdMph','00036':'windDir','00045':'rainFallIn',
+                '00052' : 'humidity','00055':'streamVeloFps','00060':'discharge','00062':'resevoirElev',
+                '00064' : 'streamDepth','00065':'gageHeight','00067':'tideStage','81027':'soilTemp'}
+
 def floodStage(current,x,action,minor,mod,major) :
     if(current < action[x]):
         return 1
