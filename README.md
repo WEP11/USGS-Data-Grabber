@@ -13,6 +13,6 @@ Flood stage icons can be changed in the array at the top of the script, and the 
 
 *Example:* `python gageGrab.py 37119,37179 output.geojson`
 
-** Additional Information:**
+**Additional Information:**
 
 usgs.py contains useful functions and dictionaries when dealing with USGS station data. The gageInfo folder simply contains the NWS Listing that associates the NWS AHPS station ID to the USGS station ID as well as the corresponding flood stage thresholds. There is also a script which creates that listing by ripping the USGS ID corresponding to the NWS ID from the AHPS RSS feed, it then takes the flood thresholds from an AHPS shapefile attribute table that I've exported for use with the Python program.
